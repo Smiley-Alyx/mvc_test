@@ -2,38 +2,43 @@
 
 namespace Project\Models\Articles;
 
+use Project\Models\ActiveRecordEntity;
 use Project\Models\Users\User;
 
-class Article
+class Article extends ActiveRecordEntity
 {
     /**
-     * @var string $title
-     * @var string $text
-     * @var User $author
+     * @var string
      */
-    private $title;
-    private $text;
-    private $author;
+    protected $name;
 
-    public function __construct(string $title, string $text, User $author)
+    /**
+     * @var string
+     */
+    protected $text;
+
+    /**
+     * @var string
+     */
+    protected $authorId;
+
+    /**
+     * @var string
+     */
+    protected $createdAt;
+
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
-        $this->title = $title;
-        $this->text = $text;
-        $this->author = $author;
+        return $this->name;
     }
 
     /**
      * @return string
      */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @return string
-     */
-    public function getText()
+    public function getText(): string
     {
         return $this->text;
     }
@@ -41,8 +46,21 @@ class Article
     /**
      * @return User
      */
-    public function getAuthor()
+    public function getAuthor(): User
     {
-        return $this->author;
+        return User::getById($this->authorId);
+    }
+
+    /**
+     * @return int
+     */
+    public function getAuthorId(): int
+    {
+        return (int) $this->authorId;
+    }
+
+    protected static function getTableName(): string
+    {
+        return 'articles';
     }
 }
