@@ -32,4 +32,46 @@ class ArticlesController
             'article' => $article
         ]);
     }
+
+    public function edit(int $articleId): void
+    {
+        /**
+         * @var Article $article
+         */
+        $article = Article::getById($articleId);
+
+        if ($article === null) {
+            $this->view->renderHtml('errors/404.php', [], 404);
+            return;
+        }
+
+        $article->setName('Новое название статьи');
+        $article->setText('Новый текст статьи');
+
+        $article->save();
+    }
+
+    public function add(): void
+    {
+        $author = User::getById(1);
+
+        $article = new Article();
+        $article->setAuthor($author);
+        $article->setName('Новое название статьи');
+        $article->setText('Новый текст статьи');
+
+        $article->save();
+    }
+
+    public function delete(int $id)
+    {
+        $article = Article::getById($id);
+
+        if ($article !== null) {
+            $article->delete();
+            $this->view->renderHtml('articles/delete.php');
+        } else {
+            $this->view->renderHtml('errors/notFound.php',[], 404);
+        }
+    }
 }
